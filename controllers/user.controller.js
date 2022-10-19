@@ -1,7 +1,12 @@
 import User from "../models/user.model.js"
 
 const getUsers = async function (req, res, next) {
+  const limit = req.query.limit || 10;
+  const page = req.query.page || 0;
+
   const users = await User.find()
+    .limit(limit)
+    .skip(limit * page)
   res.json(users)
 };
 
