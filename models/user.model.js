@@ -3,6 +3,11 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 const UserSchema = Schema({
+  isAdmin: {
+    type: Boolean,
+    default: false
+  },
+
   firstName: {
     type: String
   },
@@ -41,7 +46,7 @@ UserSchema.methods.comparePassword = function (password) {
 };
 
 UserSchema.methods.getJWT = function () {
-  return jwt.sign({ id: this._id.toString() }, process.env.JWT_SECRET, {
+  return jwt.sign({ id: this._id.toString(), isAdmin: this.isAdmin }, process.env.JWT_SECRET, {
     expiresIn: '1h'
   });
 };
