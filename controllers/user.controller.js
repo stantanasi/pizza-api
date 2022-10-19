@@ -1,5 +1,33 @@
 import User from "../models/user.model.js"
 
+const login = async function (req, res, next) {
+  if (!req.body.email || !req.body.password) {
+    res.status(200).json({ message: 'Missing Data!!' })
+    return
+  }
+
+  const user = await User.findOne({
+    email: req.body.email
+  });
+
+  if (!user) {
+    res.status(200).json({ message: 'User Not Found!' })
+    return
+  }
+
+  const isPassworddValid = user.comparePassword(req.body.password);
+
+  if (isPassworddValid) {
+    res.status(200).json({
+      data: user,
+      token: user.getJWT()
+    });
+  } else {
+    res.status(200).json({ message: 'Password is not valid!' });
+  }
+}
+
+
 const getUsers = async function (req, res, next) {
   const query = Object.assign({}, req.query)
   const limit = req.query.limit || 10;
@@ -67,40 +95,13 @@ const deleteUserById = async function (req, res, next) {
 };
 
 
-const login = async function (req, res, next) {
-  if (!req.body.email || !req.body.password) {
-    res.status(200).json({ message: 'Missing Data!!' })
-    return
-  }
-
-  const user = await User.findOne({
-    email: req.body.email
-  });
-
-  if (!user) {
-    res.status(200).json({ message: 'User Not Found!' })
-    return
-  }
-
-  const isPassworddValid = user.comparePassword(req.body.password);
-
-  if (isPassworddValid) {
-    res.status(200).json({
-      data: user,
-      token: user.getJWT()
-    });
-  } else {
-    res.status(200).json({ message: 'Password is not valid!' });
-  }
-}
-
 const userController = {
+  login,
+
   getUsers,
   createUser,
   getUserById,
   updateUserById,
   deleteUserById,
-
-  login,
 }
 export default userController
