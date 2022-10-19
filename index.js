@@ -1,11 +1,14 @@
 import dotenv from 'dotenv'
 import express from 'express'
 import mongoose from 'mongoose'
+import userController from './controllers/user.controller.js';
+import userRoutes from './routes/user.routes.js';
 
 dotenv.config()
 
 const app = express()
 
+app.use(express.json())
 app.use((req, res, next) => {
   mongoose.connect(process.env.MONGO_DB_URI)
     .then(() => next())
@@ -15,6 +18,10 @@ app.use((req, res, next) => {
 app.get('/', (req, res) => {
   res.send('Welcome to pizza-api! 🎉')
 })
+
+app.post('/login', userController.login)
+
+app.use('/users', userRoutes)
 
 const port = +(process.env.PORT || 3000)
 app.listen(port, () => {
