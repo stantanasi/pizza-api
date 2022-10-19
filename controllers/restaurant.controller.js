@@ -20,6 +20,7 @@ const getRestaurantById = async function (req, res, next) {
   try {
     const restaurant = await Restaurant.findById(req.params.id)
       .populate('pizzas')
+      .populate('orders')
     res.json(restaurant)
   } catch {
     res.status(404).json({

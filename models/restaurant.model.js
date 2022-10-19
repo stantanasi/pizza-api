@@ -16,5 +16,11 @@ const RestaurantSchema = Schema({
   toObject: { virtuals: true },
 })
 
+RestaurantSchema.virtual('orders', {
+  ref: 'Order',
+  localField: '_id',
+  foreignField: 'restaurant'
+});
+
 const Restaurant = model('Restaurant', RestaurantSchema)
 export default Restaurant
