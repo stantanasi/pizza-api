@@ -1,16 +1,17 @@
 import { Router } from "express"
 import restaurantController from "../controllers/restaurant.controller.js"
+import authJwt from "../middlewares/auth-jws.js"
 
 const restaurantRoutes = Router()
 
-restaurantRoutes.get('/', restaurantController.getRestaurants)
+restaurantRoutes.get('/', [authJwt.verifyToken], restaurantController.getRestaurants)
 
-restaurantRoutes.post('/', restaurantController.createRestaurant)
+restaurantRoutes.post('/', [authJwt.verifyToken, authJwt.isAdmin], restaurantController.createRestaurant)
 
-restaurantRoutes.get('/:id', restaurantController.getRestaurantById)
+restaurantRoutes.get('/:id', [authJwt.verifyToken], restaurantController.getRestaurantById)
 
-restaurantRoutes.patch('/:id', restaurantController.updateRestaurantById)
+restaurantRoutes.patch('/:id', [authJwt.verifyToken, authJwt.isAdmin], restaurantController.updateRestaurantById)
 
-restaurantRoutes.delete('/:id', restaurantController.deleteRestaurantById)
+restaurantRoutes.delete('/:id', [authJwt.verifyToken, authJwt.isAdmin], restaurantController.deleteRestaurantById)
 
 export default restaurantRoutes
