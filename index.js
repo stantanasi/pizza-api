@@ -4,6 +4,7 @@ import rateLimit from 'express-rate-limit';
 import mongoose from 'mongoose'
 import userController from './controllers/user.controller.js';
 import pizzaRoutes from './routes/pizza.routes.js';
+import orderRoutes from './routes/order.routes.js';
 import restaurantRoutes from './routes/restaurant.routes.js';
 import userRoutes from './routes/user.routes.js';
 
@@ -34,6 +35,7 @@ app.get('/', (req, res) => {
 app.post('/login', userController.login)
 
 app.use('/pizzas', pizzaRoutes)
+app.use('/orders', orderRoutes)
 app.use('/restaurants', restaurantRoutes)
 app.use('/users', userRoutes)
 
