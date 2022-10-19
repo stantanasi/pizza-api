@@ -6,12 +6,12 @@ const userRoutes = Router()
 
 userRoutes.get('/', [authJwt.verifyToken], userController.getUsers)
 
-userRoutes.post('/', [authJwt.verifyToken], userController.createUser)
+userRoutes.post('/', userController.createUser)
 
 userRoutes.get('/:id', [authJwt.verifyToken], userController.getUserById)
 
-userRoutes.patch('/:id', [authJwt.verifyToken], userController.updateUserById)
+userRoutes.patch('/:id', [authJwt.verifyToken, authJwt.isAdmin], userController.updateUserById)
 
-userRoutes.delete('/:id', [authJwt.verifyToken], userController.deleteUserById)
+userRoutes.delete('/:id', [authJwt.verifyToken, authJwt.isAdmin], userController.deleteUserById)
 
 export default userRoutes
