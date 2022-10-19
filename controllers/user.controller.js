@@ -44,7 +44,7 @@ const getUsers = async function (req, res, next) {
 
 const createUser = async function (req, res, next) {
   let user = await User.findOne({
-    email: data.email
+    email: req.body.email
   });
 
   if (user) {
