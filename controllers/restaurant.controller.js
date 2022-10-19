@@ -19,6 +19,7 @@ const createRestaurant = async function (req, res, next) {
 const getRestaurantById = async function (req, res, next) {
   try {
     const restaurant = await Restaurant.findById(req.params.id)
+      .populate('pizzas')
     res.json(restaurant)
   } catch {
     res.status(404).json({
