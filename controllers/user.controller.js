@@ -63,6 +63,7 @@ const createUser = async function (req, res, next) {
 const getUserById = async function (req, res, next) {
   try {
     const user = await User.findById(req.params.id)
+      .populate('orders')
     res.json(user)
   } catch {
     res.status(404).json({

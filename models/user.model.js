@@ -6,18 +6,29 @@ const UserSchema = Schema({
   firstName: {
     type: String
   },
+
   lastName: {
     type: String
   },
+
   email: {
     type: String
   },
+
   password: {
     type: String
   },
 }, {
   timestamps: true,
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true },
 })
+
+UserSchema.virtual('orders', {
+  ref: 'Order',
+  localField: '_id',
+  foreignField: 'client'
+});
 
 UserSchema.pre('save', function () {
   if (this.isModified('password') || this.isNew) {
