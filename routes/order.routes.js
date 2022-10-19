@@ -1,16 +1,17 @@
 import { Router } from "express"
 import orderController from "../controllers/order.controller.js"
+import authJwt from "../middlewares/auth-jws.js"
 
 const orderRoutes = Router()
 
-orderRoutes.get('/', orderController.getOrders)
+orderRoutes.get('/', [authJwt.verifyToken], orderController.getOrders)
 
-orderRoutes.post('/', orderController.createOrder)
+orderRoutes.post('/', [authJwt.verifyToken, authJwt.isAdmin], orderController.createOrder)
 
-orderRoutes.get('/:id', orderController.getOrderById)
+orderRoutes.get('/:id', [authJwt.verifyToken], orderController.getOrderById)
 
-orderRoutes.patch('/:id', orderController.updateOrderById)
+orderRoutes.patch('/:id', [authJwt.verifyToken, authJwt.isAdmin], orderController.updateOrderById)
 
-orderRoutes.delete('/:id', orderController.deleteOrderById)
+orderRoutes.delete('/:id', [authJwt.verifyToken, authJwt.isAdmin], orderController.deleteOrderById)
 
 export default orderRoutes
