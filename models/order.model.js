@@ -1,11 +1,6 @@
 import { Schema, model } from "mongoose"
 
 const OrderSchema = Schema({
-  price: {
-    type: Number,
-  },
-
-
   client: {
     type: Schema.Types.ObjectId,
     ref: 'User',
