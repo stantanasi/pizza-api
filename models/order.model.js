@@ -29,5 +29,19 @@ const OrderSchema = Schema({
   toObject: { virtuals: true },
 })
 
+OrderSchema.virtual('totalPrice').get(function () {
+  return this.pizzas
+    .map(pizza => pizza.price ?? 0)
+    .reduce((a, b) => a + b, 0);
+});
+
+OrderSchema
+  .pre('findOne', function () {
+    this.populate('pizzas');
+  })
+  .pre('find', function () {
+    this.populate('pizzas');
+  });
+
 const Order = model('Order', OrderSchema)
 export default Order
