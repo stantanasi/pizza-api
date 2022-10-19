@@ -1,6 +1,7 @@
 import dotenv from 'dotenv'
 import express from 'express'
 import mongoose from 'mongoose'
+import userController from './controllers/user.controller.js';
 import userRoutes from './routes/user.routes.js';
 
 dotenv.config()
@@ -17,6 +18,8 @@ app.use((req, res, next) => {
 app.get('/', (req, res) => {
   res.send('Welcome to pizza-api! 🎉')
 })
+
+app.post('/login', userController.login)
 
 app.use('/users', userRoutes)
 
