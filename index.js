@@ -3,6 +3,7 @@ import express from 'express'
 import rateLimit from 'express-rate-limit';
 import mongoose from 'mongoose'
 import userController from './controllers/user.controller.js';
+import pizzaRoutes from './routes/pizza.routes.js';
 import userRoutes from './routes/user.routes.js';
 
 dotenv.config()
@@ -31,6 +32,7 @@ app.get('/', (req, res) => {
 
 app.post('/login', userController.login)
 
+app.use('/pizzas', pizzaRoutes)
 app.use('/users', userRoutes)
 
 const port = +(process.env.PORT || 3000)
