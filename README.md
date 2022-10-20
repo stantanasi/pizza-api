@@ -60,17 +60,34 @@ cd pizza-api
 ```bash
 npm install
 ```
+## Running the server
+
+Run the derver
+```bash
+npm run start
+```
+
+Navigate to `http://localhost:3000`.
 
 ## Development
 
 Run development server
 
 ```bash
-npm start
+npm run dev
 ```
 
 Navigate to `http://localhost:3000`.
 
+## Generate documentation
+
+Run the command : 
+
+```bash
+npm run doc
+```
+
+Then open ./apidoc/index.html
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
