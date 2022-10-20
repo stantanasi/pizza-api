@@ -8,6 +8,7 @@ import orderRoutes from './routes/order.routes.js';
 import restaurantRoutes from './routes/restaurant.routes.js';
 import userRoutes from './routes/user.routes.js';
 import clientRoutes from './routes/client.routes.js';
+import employeeRoutes from './routes/employee.routes.js';
 import clientController from './controllers/client.controller.js';
 
 dotenv.config()
@@ -42,6 +43,7 @@ app.use('/orders', orderRoutes)
 app.use('/restaurants', restaurantRoutes)
 app.use('/users', userRoutes)
 app.use('/clients', clientRoutes)
+app.use('/employees', employeeRoutes)
 
 const port = +(process.env.PORT || 3000)
 app.listen(port, () => {
