@@ -39,7 +39,19 @@ const getClients = async function (req, res, next) {
   const clients = await Client.find(query)
     .limit(limit)
     .skip(limit * page)
-  res.json(clients)
+
+  let clientList = []
+  for (let i = 0; i < clients.length; i++) {
+    clientList.push(
+      {
+        "id": clients[i].id,
+        "firstName": clients[i].firstName,
+        "lastName": clients[i].lastName,
+        "email": clients[i].email,
+      }
+    );
+  }
+  res.json(clientList)
 };
 
 const createClient = async function (req, res, next) {
@@ -57,14 +69,24 @@ const createClient = async function (req, res, next) {
   client = new Client(req.body);
   await client.save();
 
-  res.json(client)
+  res.json({
+    "id": client.id,
+    "firstName": client.firstName,
+    "lastName": client.lastName,
+    "email": client.email,
+  })
 };
 
 const getClientById = async function (req, res, next) {
   try {
     const client = await Client.findById(req.params.id)
       .populate('orders')
-    res.json(client)
+    res.json({
+      "id": client.id,
+      "firstName": client.firstName,
+      "lastName": client.lastName,
+      "email": client.email,
+    })
   } catch {
     res.status(404).json({
       error: "Client doesn't exist!"
@@ -76,7 +98,12 @@ const updateClientById = async function (req, res, next) {
   try {
     await Client.findByIdAndUpdate(req.params.id, req.body)
     const client = await Client.findById(req.params.id)
-    res.json(client)
+    res.json({
+      "id": client.id,
+      "firstName": client.firstName,
+      "lastName": client.lastName,
+      "email": client.email,
+    })
   } catch {
     res.status(404).json({
       error: "Client doesn't exist!"
@@ -87,7 +114,9 @@ const updateClientById = async function (req, res, next) {
 const deleteClientById = async function (req, res, next) {
   try {
     await Client.findByIdAndDelete(req.params.id)
-    res.status(204).send()
+    res.status(200).send({
+      message: "Deletion complete"
+    })
   } catch {
     res.status(404).json({
       error: "Client doesn't exist!"
