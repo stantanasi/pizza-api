@@ -29,6 +29,7 @@ const login = async function (req, res, next) {
 
 
 const getUsers = async function (req, res, next) {
+  let usersList = [];
   const query = Object.assign({}, req.query)
   const limit = req.query.limit || 10;
   const page = req.query.page || 0;
@@ -39,7 +40,19 @@ const getUsers = async function (req, res, next) {
   const users = await User.find(query)
     .limit(limit)
     .skip(limit * page)
-  res.json(users)
+
+  for (let i = 0; i < users.length; i++) {
+    usersList.push(
+      {
+        "id": users[i].id,
+        "firstName": users[i].firstName,
+        "lastName": users[i].lastName,
+        "email": users[i].email,
+      }
+    );
+  }
+  
+  res.json(usersList)
 };
 
 const createUser = async function (req, res, next) {
@@ -57,14 +70,24 @@ const createUser = async function (req, res, next) {
   user = new User(req.body);
   await user.save();
 
-  res.json(user)
+  res.json({
+    "id": user.id,
+    "firstName": user.firstName,
+    "lastName": user.lastName,
+    "email": user.email,
+  })
 };
 
 const getUserById = async function (req, res, next) {
   try {
     const user = await User.findById(req.params.id)
       .populate('orders')
-    res.json(user)
+    res.json({
+      "id": user.id,
+      "firstName": user.firstName,
+      "lastName": user.lastName,
+      "email": user.email,
+    })
   } catch {
     res.status(404).json({
       error: "User doesn't exist!"
@@ -76,7 +99,12 @@ const updateUserById = async function (req, res, next) {
   try {
     await User.findByIdAndUpdate(req.params.id, req.body)
     const user = await User.findById(req.params.id)
-    res.json(user)
+    res.json({
+      "id": user.id,
+      "firstName": user.firstName,
+      "lastName": user.lastName,
+      "email": user.email,
+    })
   } catch {
     res.status(404).json({
       error: "User doesn't exist!"
@@ -87,7 +115,9 @@ const updateUserById = async function (req, res, next) {
 const deleteUserById = async function (req, res, next) {
   try {
     await User.findByIdAndDelete(req.params.id)
-    res.status(204).send()
+    res.status(200).send({
+      message: "Deletion complete"
+    })
   } catch {
     res.status(404).json({
       error: "User doesn't exist!"
