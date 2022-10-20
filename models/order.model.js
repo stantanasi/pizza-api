@@ -3,7 +3,7 @@ import { Schema, model } from "mongoose"
 const OrderSchema = Schema({
   client: {
     type: Schema.Types.ObjectId,
-    ref: 'User',
+    ref: 'Client',
     required: true
   },
 
@@ -18,6 +18,12 @@ const OrderSchema = Schema({
     ref: 'Pizza',
     default: [],
   }],
+  
+  employee: {
+    type: Schema.Types.ObjectId,
+    ref: 'Employee',
+    required: true
+  },
 }, {
   timestamps: true,
   toJSON: { virtuals: true },
