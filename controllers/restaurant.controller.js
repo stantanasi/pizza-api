@@ -7,13 +7,29 @@ const getRestaurants = async function (req, res, next) {
   const restaurants = await Restaurant.find()
     .limit(limit)
     .skip(limit * page)
-  res.json(restaurants)
+
+  let restaurantList = []
+  for (let i = 0; i < restaurants.length; i++) {
+    restaurantList.push(
+      {
+        "id": restaurants[i].id,
+        "name": restaurants[i].name,
+        "pizzas": restaurants[i].pizzas,
+      }
+    );
+  }
+  
+  res.json(restaurantList)
 };
 
 const createRestaurant = async function (req, res, next) {
   const restaurant = new Restaurant(req.body)
   await restaurant.save()
-  res.json(restaurant)
+  res.json({
+    "id": restaurant.id,
+    "name": restaurant.name,
+    "pizzas": restaurant.pizzas,
+  })
 };
 
 const getRestaurantById = async function (req, res, next) {
@@ -21,7 +37,11 @@ const getRestaurantById = async function (req, res, next) {
     const restaurant = await Restaurant.findById(req.params.id)
       .populate('pizzas')
       .populate('orders')
-    res.json(restaurant)
+    res.json({
+      "id": restaurant.id,
+      "name": restaurant.name,
+      "pizzas": restaurant.pizzas,
+    })
   } catch {
     res.status(404).json({
       error: "Restaurant doesn't exist!"
@@ -33,7 +53,11 @@ const updateRestaurantById = async function (req, res, next) {
   try {
     await Restaurant.findByIdAndUpdate(req.params.id, req.body)
     const restaurant = await Restaurant.findById(req.params.id)
-    res.json(restaurant)
+    res.json({
+      "id": restaurant.id,
+      "name": restaurant.name,
+      "pizzas": restaurant.pizzas,
+    })
   } catch {
     res.status(404).json({
       error: "Restaurant doesn't exist!"
@@ -44,7 +68,9 @@ const updateRestaurantById = async function (req, res, next) {
 const deleteRestaurantById = async function (req, res, next) {
   try {
     await Restaurant.findByIdAndDelete(req.params.id)
-    res.status(204).send()
+    res.status(200).send({
+      "message": "Deletion complete"
+    })
   } catch {
     res.status(404).json({
       error: "Restaurant doesn't exist!"
