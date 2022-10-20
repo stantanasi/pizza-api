@@ -18,7 +18,7 @@ userRoutes.get('/', [authJwt.verifyToken], userController.getUsers)
 
 /**
  * @api {post} /users Create a user
- * @apiName Update User
+ * @apiName Create User
  * @apiGroup User
  *
  * @apiSuccess {String} id Id of the User.
