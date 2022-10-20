@@ -7,6 +7,8 @@ import pizzaRoutes from './routes/pizza.routes.js';
 import orderRoutes from './routes/order.routes.js';
 import restaurantRoutes from './routes/restaurant.routes.js';
 import userRoutes from './routes/user.routes.js';
+import clientRoutes from './routes/client.routes.js';
+import clientController from './controllers/client.controller.js';
 
 dotenv.config()
 
@@ -23,7 +25,7 @@ app.use(
 );
 
 app.use((req, res, next) => {
-  mongoose.connect(process.env.MONGO_DB_URI)
+  mongoose.connect(process.env.MONGO_DB_URI_CLOUD)
     .then(() => next())
     .catch(err => next(err))
 });
@@ -33,11 +35,13 @@ app.get('/', (req, res) => {
 })
 
 app.post('/login', userController.login)
+app.post('/client/login', clientController.login)
 
 app.use('/pizzas', pizzaRoutes)
 app.use('/orders', orderRoutes)
 app.use('/restaurants', restaurantRoutes)
 app.use('/users', userRoutes)
+app.use('/clients', clientRoutes)
 
 const port = +(process.env.PORT || 3000)
 app.listen(port, () => {
