@@ -10,10 +10,14 @@ import userRoutes from './routes/user.routes.js';
 import clientRoutes from './routes/client.routes.js';
 import employeeRoutes from './routes/employee.routes.js';
 import clientController from './controllers/client.controller.js';
+import morgan from 'morgan'
 
 dotenv.config()
 
 const app = express()
+const logger = morgan
+
+app.use(logger('dev'))
 
 app.use(express.json())
 app.use(
@@ -49,3 +53,8 @@ const port = +(process.env.PORT || 3000)
 app.listen(port, () => {
   console.log(`Server is listening on ${port}`)
 })
+
+// Important because it prevents nodejs app from crashing
+process.on('unhandledRejection', error => {
+  console.error('Uncaught Error', pe(error));
+});
